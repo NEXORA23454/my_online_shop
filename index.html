@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+header {
+  background: #202c39;
+  color: white;
+  padding: 18px 5%;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.search {
+  flex: 1;
+  max-width: 450px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.cart-button {
+  background: #f5a623;
+  color: #222;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+nav {
+  background: #17212b;
+  padding: 14px 5%;
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.banner {
+  margin: 25px auto;
+  max-width: 1200px;
+  min-height: 270px;
+  padding: 45px;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #243b55, #4b79a1);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+
+.banner h1 {
+  font-size: 38px;
+}
+
+.banner p {
+  font-size: 18px;
+}
+
+.banner button {
+  width: fit-content;
+  padding: 13px 25px;
+  background: #f5a623;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.category {
+  padding: 11px 18px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.category.active {
+  background: #202c39;
+  color: white;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.product {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  padding-bottom: 15px;
+  box-shadow: 0 2px 8px #00000010;
+}
+
+.product img {
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+  background: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.product-info {
+  padding: 12px;
+}
+
+.product h3 {
+  font-size: 16px;
+  min-height: 38px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.product h3:hover {
+  color: #e34b36;
+}
+
+.old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 14px;
+}
+
+.price {
+  color: #e34b36;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 7px 0;
+}
+
+.product button {
+  width: 100%;
+  padding: 12px;
+  background: #f5a623;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cart-panel {
+  position: fixed;
+  right: -420px;
+  top: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: white;
+  z-index: 10;
+  padding: 25px;
+  box-shadow: -5px 0 20px #0003;
+  transition: 0.3s;
+  overflow-y: auto;
+}
+
+.cart-panel.open {
+  right: 0;
+}
+
+.cart-item {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.cart-item button {
+  margin-top: 8px;
+  padding: 5px 10px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 25px;
+  background: none;
+  border: none;
+  color: #222;
+}
+
+.total {
+  font-size: 23px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.checkout {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 20;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.checkout-box {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.checkout input,
+.checkout textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.checkout button {
+  padding: 12px;
+  background: #f5a623;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+
+footer {
+  background: #202c39;
+  color: white;
+  padding: 35px 5%;
+  margin-top: 50px;
+  text-align: center;
+  line-height: 2;
+}
+
+/* КАРТОЧКА ТОВАРА */
+
+.product-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: #0009;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.product-modal.open {
+  display: flex;
+}
+
+.product-modal-box {
+  background: white;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 25px;
+  position: relative;
+}
+
+.product-modal-box .close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  z-index: 2;
+}
+
+.product-modal-image {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  margin: 15px 0;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.product-modal-title {
+  font-size: 25px;
+  margin: 10px 0;
+}
+
+.product-modal-price {
+  color: #e34b36;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.product-modal-description {
+  line-height: 1.6;
+  margin: 15px 0;
+  white-space: pre-wrap;
+}
+
+.product-modal button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #f5a623;
+  font-weight: bold;
+}
+
+.product-modal .add-modal-cart {
+  width: 100%;
+  margin: 15px 0;
+}
+
+.review-stars {
+  color: #e5a000;
+  font-size: 20px;
+  margin: 8px 0;
+}
+
+.review-form {
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.review-form input,
+.review-form textarea,
+.review-form select {
+  width: 100%;
+  padding: 11px;
+  margin: 7px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.review-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.review-item {
+  border-top: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.review-item p {
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+@media (max-width: 850px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .banner h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 450px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .product img {
+    height: 140px;
+  }
+
+  .product h3 {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .banner {
+    padding: 25px;
+  }
+
+  .product-modal-box {
+    padding: 18px;
+  }
+
+  .product-modal-image {
+    height: 220px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">NEXORA</div>
+
+    <input
+      class="search"
+      id="search"
+      type="text"
+      placeholder="Търсене на продукти..."
+      oninput="renderProducts()"
+    >
+
+    <button class="cart-button" onclick="toggleCart()">
+      🛒 Количка (<span id="cart-count">0</span>)
+    </button>
+  </div>
+</header>
+
+<nav>
+  <a href="#">Начало</a>
+  <a href="#products">Продукти</a>
+  <a href="#contacts">Контакти</a>
+</nav>
+
+<section class="banner">
+  <h1>Специални оферти!</h1>
+  <p>Открий най-добрите предложения на страхотни цени!</p>
+  <button onclick="document.getElementById('products').scrollIntoView()">
+    Разгледай продуктите
+  </button>
+</section>
+
+<main class="container" id="products">
+  <h2>Нашите продукти</h2>
+  <div class="categories" id="categories"></div>
+  <div class="products" id="product-list"></div>
+</main>
+
+<!-- КОРЗИНА -->
+
+<div class="cart-panel" id="cart">
+  <button class="close" onclick="toggleCart()">×</button>
+  <h2>Твоята количка</h2>
+  <div id="cart-items"></div>
+
+  <div class="total">
+    Общо: <span id="total">0.00</span> €
+  </div>
+
+  <button class="cart-button" onclick="openCheckout()">
+    Поръчай
+  </button>
+</div>
+
+<!-- ОФОРМЛЕНИЕ НА ПОРЪЧКА -->
+
+<div class="checkout" id="checkout">
+  <div class="checkout-box">
+    <button class="close" onclick="closeCheckout()">×</button>
+    <h2>Завърши поръчката</h2>
+
+    <form onsubmit="submitOrder(event)">
+      <input
+        type="text"
+        name="customerName"
+        placeholder="Вашето име"
+        required
+      >
+
+      <input
+        type="tel"
+        name="customerPhone"
+        placeholder="Телефон"
+        required
+      >
+
+      <input
+        type="text"
+        name="customerAddress"
+        placeholder="Град и адрес за доставка"
+        required
+      >
+
+      <textarea
+        name="customerNotes"
+        placeholder="Допълнителни бележки"
+      ></textarea>
+
+      <button type="submit">Изпрати поръчка</button>
+    </form>
+  </div>
+</div>
+
+<!-- КАРТОЧКА ТОВАРА -->
+
+<div class="product-modal" id="product-modal" onclick="closeProductOutside(event)">
+  <div class="product-modal-box">
+    <button class="close" onclick="closeProduct()">×</button>
+
+    <img
+      id="modal-image"
+      class="product-modal-image"
+      src=""
+      alt="Продукт"
+    >
+
+    <h2 id="modal-title" class="product-modal-title"></h2>
+    <div id="modal-old-price" class="old-price"></div>
+    <div id="modal-price" class="product-modal-price"></div>
+    <p id="modal-description" class="product-modal-description"></p>
+
+    <button
+      id="modal-add-button"
+      class="add-modal-cart"
+      onclick="addModalProductToCart()"
+    >
+      Добави в количката
+    </button>
+
+    <div class="review-section">
+      <h3>Оценки и отзиви</h3>
+      <div id="review-average"></div>
+      <div id="reviews-list"></div>
+
+      <form class="review-form" onsubmit="submitReview(event)">
+        <h3>Остави отзив</h3>
+
+        <input
+          type="text"
+          id="review-name"
+          placeholder="Твоето име"
+          maxlength="40"
+          required
+        >
+
+        <select id="review-rating" required>
+          <option value="">Избери оценка</option>
+          <option value="5">★★★★★ - Отлично</option>
+          <option value="4">★★★★ - Много добро</option>
+          <option value="3">★★★ - Добро</option>
+          <option value="2">★★ - Средно</option>
+          <option value="1">★ - Слабо</option>
+        </select>
+
+        <textarea
+          id="review-text"
+          placeholder="Напиши своя отзив..."
+          maxlength="500"
+          required
+        ></textarea>
+
+        <button type="submit">Изпрати отзив</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer id="contacts">
+  <h2>NEXORA</h2>
+  <p>Email: shop827473@gmail.com</p>
+  <p>© 2026 Всички права запазени</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+
+/* ПОДКЛЮЧЕНИЕ EMAILJS */
+
+emailjs.init({
+  publicKey: "9FB2_xVKaIL5wxgB1"
+});
+
+
+/* ПОДКЛЮЧЕНИЕ SUPABASE */
+
+const SUPABASE_URL = "https://pbgedgufsdmlindecayn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_qehwDYF02Kyvyt3wrnkqnw_OPK-8u8N";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* ОСНОВНЫЕ ПЕРЕМЕННЫЕ */
+
+let products = [];
+let selectedCategory = "Всички";
+let cart = [];
+let currentProductId = null;
+
+
+/* СОХРАНЕНИЕ КОРЗИНЫ */
+
+function saveCart() {
+  const data = cart.map(item => ({
+    id: item.id,
+    quantity: item.quantity
+  }));
+
+  localStorage.setItem("myShopCart", JSON.stringify(data));
+}
+
+
+/* ВОССТАНОВЛЕНИЕ КОРЗИНЫ */
+
+function restoreCart() {
+  const savedCart = JSON.parse(
+    localStorage.getItem("myShopCart") || "[]"
+  );
+
+  cart = savedCart.map(savedItem => {
+    const product = products.find(
+      p => Number(p.id) === Number(savedItem.id)
+    );
+
+    if (!product) return null;
+
+    return {
+      ...product,
+      quantity: Math.max(1, Number(savedItem.quantity) || 1)
+    };
+  }).filter(Boolean);
+
+  updateCart();
+}
+
+
+/* ЗАГРУЗКА ТОВАРОВ ИЗ SUPABASE */
+
+async function loadProducts() {
+  const container = document.getElementById("product-list");
+
+  container.innerHTML = "<p>Зареждане на продуктите...</p>";
+
+  const { data, error } = await db
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Грешка при зареждане:", error);
+
+    container.innerHTML =
+      "<p>Грешка при зареждане на продуктите. Опитайте отново по-късно.</p>";
+
+    return;
+  }
+
+  products = (data || []).map(product => ({
+    id: product.id,
+    name: product.name,
+    price: Number(product.price),
+    oldPrice: product.old_price,
+    category: product.category || "",
+    description: product.description || "",
+    image: product.image_url || ""
+  }));
+
+  renderCategories();
+  renderProducts();
+  restoreCart();
+}
+
+
+/* КАТЕГОРИИ */
+
+function renderCategories() {
+  const categories = [
+    "Всички",
+    ...new Set(products.map(p => p.category).filter(Boolean))
+  ];
+
+  document.getElementById("categories").innerHTML =
+    categories.map(category => `
+      <button
+        class="category ${selectedCategory === category ? "active" : ""}"
+        onclick="selectCategory(this.dataset.category)"
+        data-category="${escapeHTML(category)}">
+        ${escapeHTML(category)}
+      </button>
+    `).join("");
+}
+
+
+function selectCategory(category) {
+  selectedCategory = category;
+  renderCategories();
+  renderProducts();
+}
+
+
+/* ЗАЩИТА НА ТЕКСТА */
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+
+/* ПОКАЗВАНЕ НА ПРОДУКТИТЕ */
+
+function renderProducts() {
+  const search = document
+    .getElementById("search")
+    .value.toLowerCase();
+
+  const filtered = products.filter(p => {
+    const matchesSearch =
+      String(p.name || "").toLowerCase().includes(search);
+
+    const matchesCategory =
+      selectedCategory === "Всички" ||
+      p.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  document.getElementById("product-list").innerHTML =
+    filtered.map(p => {
+      const oldPrice = Number(p.oldPrice);
+
+      return `
+        <div class="product">
+          <img
+            src="${escapeHTML(p.image || "")}"
+            alt="${escapeHTML(p.name)}"
+            onclick="openProduct(${Number(p.id)})"
+          >
+
+          <div class="product-info">
+            <h3 onclick="openProduct(${Number(p.id)})">
+              ${escapeHTML(p.name)}
+            </h3>
+
+            ${
+              p.oldPrice !== null &&
+              p.oldPrice !== "" &&
+              Number.isFinite(oldPrice) &&
+              oldPrice > 0
+                ? `<div class="old-price">${oldPrice.toFixed(2)} €</div>`
+                : ""
+            }
+
+            <div class="price">
+              ${Number(p.price || 0).toFixed(2)} €
+            </div>
+
+            <button onclick="addToCart(${Number(p.id)})">
+              Добави в количката
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+}
+
+
+/* ОТВАРЯНЕ НА КАРТОЧКАТА */
+
+function openProduct(id) {
+  const product = products.find(
+    p => Number(p.id) === Number(id)
+  );
+
+  if (!product) return;
+
+  currentProductId = Number(id);
+
+  document.getElementById("modal-image").src =
+    product.image || "";
+
+  document.getElementById("modal-image").alt =
+    product.name || "Продукт";
+
+  document.getElementById("modal-title").textContent =
+    product.name || "Продукт";
+
+  document.getElementById("modal-price").textContent =
+    Number(product.price || 0).toFixed(2) + " €";
+
+  const oldPrice = Number(product.oldPrice);
+  const oldPriceElement =
+    document.getElementById("modal-old-price");
+
+  if (
+    product.oldPrice !== null &&
+    product.oldPrice !== "" &&
+    Number.isFinite(oldPrice) &&
+    oldPrice > 0
+  ) {
+    oldPriceElement.textContent =
+      oldPrice.toFixed(2) + " €";
+
+    oldPriceElement.style.display = "block";
+  } else {
+    oldPriceElement.textContent = "";
+    oldPriceElement.style.display = "none";
+  }
+
+  document.getElementById("modal-description").textContent =
+    product.description ||
+    "Няма добавено описание за този продукт.";
+
+  renderReviews();
+
+  document.getElementById("product-modal")
+    .classList.add("open");
+}
+
+
+function closeProduct() {
+  document.getElementById("product-modal")
+    .classList.remove("open");
+
+  currentProductId = null;
+}
+
+
+function closeProductOutside(event) {
+  if (event.target.id === "product-modal") {
+    closeProduct();
+  }
+}
+
+
+function addModalProductToCart() {
+  if (currentProductId === null) return;
+
+  addToCart(currentProductId);
+  closeProduct();
+}
+
+
+/* ОТЗИВИ */
+
+function getReviews() {
+  return JSON.parse(
+    localStorage.getItem("productReviews") || "{}"
+  );
+}
+
+
+function renderReviews() {
+  if (currentProductId === null) return;
+
+  const reviews = getReviews();
+  const productReviews = reviews[currentProductId] || [];
+
+  const averageElement =
+    document.getElementById("review-average");
+
+  const listElement =
+    document.getElementById("reviews-list");
+
+  if (productReviews.length === 0) {
+    averageElement.innerHTML =
+      "<p>Все още няма оценки.</p>";
+
+    listElement.innerHTML =
+      "<p>Бъди първият, който оставя отзив!</p>";
+
+    return;
+  }
+
+  const average =
+    productReviews.reduce(
+      (sum, review) => sum + Number(review.rating), 0
+    ) / productReviews.length;
+
+  averageElement.innerHTML = `
+    <div class="review-stars">
+      ${"★".repeat(Math.round(average))}${"☆".repeat(5 - Math.round(average))}
+    </div>
+    <p>${average.toFixed(1)} от 5 (${productReviews.length} отзива)</p>
+  `;
+
+  listElement.innerHTML = productReviews.map(review => `
+    <div class="review-item">
+      <strong>${escapeHTML(review.name)}</strong>
+
+      <div class="review-stars">
+        ${"★".repeat(Number(review.rating))}${"☆".repeat(5 - Number(review.rating))}
+      </div>
+
+      <p>${escapeHTML(review.text)}</p>
+    </div>
+  `).join("");
+}
+
+
+function submitReview(event) {
+  event.preventDefault();
+
+  if (currentProductId === null) return;
+
+  const name =
+    document.getElementById("review-name").value.trim();
+
+  const rating =
+    Number(document.getElementById("review-rating").value);
+
+  const text =
+    document.getElementById("review-text").value.trim();
+
+  if (!name || !text || rating < 1 || rating > 5) {
+    alert("Моля, попълни всички полета.");
+    return;
+  }
+
+  const reviews = getReviews();
+
+  if (!reviews[currentProductId]) {
+    reviews[currentProductId] = [];
+  }
+
+  reviews[currentProductId].push({
+    name,
+    rating,
+    text
+  });
+
+  localStorage.setItem(
+    "productReviews",
+    JSON.stringify(reviews)
+  );
+
+  event.target.reset();
+  renderReviews();
+
+  alert("Отзивът беше добавен!");
+}
+
+
+/* КОРЗИНА */
+
+function addToCart(id) {
+  const product = products.find(
+    p => Number(p.id) === Number(id)
+  );
+
+  if (!product) return;
+
+  const item = cart.find(
+    p => Number(p.id) === Number(id)
+  );
+
+  if (item) {
+    item.quantity++;
+  } else {
+    cart.push({
+      ...product,
+      quantity: 1
+    });
+  }
+
+  updateCart();
+}
+
+
+function updateCart() {
+  const container =
+    document.getElementById("cart-items");
+
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <p>${Number(item.price).toFixed(2)} €</p>
+
+      <p>Количество: ${item.quantity}</p>
+
+      <button onclick="changeQuantity(${Number(item.id)}, -1)">−</button>
+
+      <button onclick="changeQuantity(${Number(item.id)}, 1)">+</button>
+
+      <button onclick="removeItem(${Number(item.id)})">Изтрий</button>
+    </div>
+  `).join("");
+
+  const count = cart.reduce(
+    (sum, item) => sum + item.quantity, 0
+  );
+
+  const total = cart.reduce(
+    (sum, item) =>
+      sum + Number(item.price) * item.quantity, 0
+  );
+
+  document.getElementById("cart-count").textContent = count;
+  document.getElementById("total").textContent =
+    total.toFixed(2);
+
+  saveCart();
+}
+
+
+function changeQuantity(id, amount) {
+  const item = cart.find(
+    p => Number(p.id) === Number(id)
+  );
+
+  if (!item) return;
+
+  item.quantity += amount;
+
+  if (item.quantity <= 0) {
+    removeItem(id);
+  } else {
+    updateCart();
+  }
+}
+
+
+function removeItem(id) {
+  cart = cart.filter(
+    p => Number(p.id) !== Number(id)
+  );
+
+  updateCart();
+}
+
+
+function toggleCart() {
+  document.getElementById("cart")
+    .classList.toggle("open");
+}
+
+
+/* ОФОРМЛЕНИЕ НА ПОРЪЧКА */
+
+function openCheckout() {
+  if (cart.length === 0) {
+    alert("Количката е празна!");
+    return;
+  }
+
+  document.getElementById("checkout").style.display = "flex";
+}
+
+
+function closeCheckout() {
+  document.getElementById("checkout").style.display = "none";
+}
+
+
+async function submitOrder(event) {
+  event.preventDefault();
+
+  const form = event.target;
+
+  const name = form.elements.customerName.value;
+  const phone = form.elements.customerPhone.value;
+  const address = form.elements.customerAddress.value;
+  const notes = form.elements.customerNotes.value;
+
+  if (!cart || cart.length === 0) {
+    alert("Количката е празна!");
+    return;
+  }
+
+  const confirmed = confirm(
+    "Важно!\n\n" +
+    "Доставката засега е само за град Варна.\n\n" +
+    "Натиснете OK, за да потвърдите поръчката."
+  );
+
+  if (!confirmed) return;
+
+  const order = cart.map(item =>
+    `${item.name} x ${item.quantity} = ${Number(item.price) * item.quantity} €`
+  ).join("\n");
+
+  const total = cart.reduce(
+    (sum, item) =>
+      sum + Number(item.price) * item.quantity, 0
+  );
+
+  try {
+    await emailjs.send(
+      "service_igvg84f",
+      "template_a66s9a7",
+      {
+        name: name,
+        phone: phone,
+        address: address,
+        notes: notes,
+        order: order,
+        total: total.toFixed(2)
+      }
+    );
+
+    alert("Вашата поръчка беше изпратена успешно!");
+
+    form.reset();
+
+    cart = [];
+    updateCart();
+
+    closeCheckout();
+
+    document.getElementById("cart")
+      .classList.remove("open");
+
+  } catch (error) {
+    console.error(error);
+
+    alert("Възникна грешка. Моля, опитайте отново.");
+  }
+}
+
+
+/* ЗАТВАРЯНЕ С ESC */
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeProduct();
+    closeCheckout();
+
+    document.getElementById("cart")
+      .classList.remove("open");
+  }
+});
+
+
+/* СТАРТИРАНЕ НА САЙТА */
+
+updateCart();
+loadProducts();
+
+</script>
+
+</body>
+</html>
