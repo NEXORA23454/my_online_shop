@@ -881,24 +881,48 @@ function addModalProductToCart() {
 
 /* ОТЗИВИ */
 
-function getReviews() {
-  return JSON.parse(
-    localStorage.getItem("productReviews") || "{}"
-  );
+async function getReviews() {
+  const { data, error } = await supabase
+    .from("product_reviews")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Ошибка загрузки отзывов:", error);
+    return {};
+  }
+
+  const reviews = {};
+
+  data.forEach(review => {
+    if (!reviews[review.product_id]) {
+      reviews[review.product_id] = [];
+    }
+
+    reviews[review.product_id].push({
+      name: review.name,
+      rating: review.rating,
+      text: review.review_text
+    });
+  });
+
+  return reviews;
 }
 
 
-function renderReviews() {
+async function renderReviews() {
   if (currentProductId === null) return;
-
-  const reviews = getReviews();
-  const productReviews = reviews[currentProductId] || [];
 
   const averageElement =
     document.getElementById("review-average");
 
   const listElement =
     document.getElementById("reviews-list");
+
+  const reviews = await getReviews();
+
+  const productReviews =
+    reviews[String(currentProductId)] || [];
 
   if (productReviews.length === 0) {
     averageElement.innerHTML =
@@ -936,48 +960,49 @@ function renderReviews() {
 }
 
 
-function submitReview(event) {
+async function submitReview(event) {
   event.preventDefault();
 
   if (currentProductId === null) return;
 
-  const name =
-    document.getElementById("review-name").value.trim();
+  const name = document
+    .getElementById("review-name")
+    .value.trim();
 
-  const rating =
-    Number(document.getElementById("review-rating").value);
+  const rating = Number(
+    document.getElementById("review-rating").value
+  );
 
-  const text =
-    document.getElementById("review-text").value.trim();
+  const text = document
+    .getElementById("review-text")
+    .value.trim();
 
   if (!name || !text || rating < 1 || rating > 5) {
     alert("Моля, попълни всички полета.");
     return;
   }
 
-  const reviews = getReviews();
+  const { error } = await supabase
+    .from("product_reviews")
+    .insert([{
+      product_id: String(currentProductId),
+      name: name,
+      rating: rating,
+      review_text: text
+    }]);
 
-  if (!reviews[currentProductId]) {
-    reviews[currentProductId] = [];
+  if (error) {
+    console.error("Грешка при добавяне:", error);
+    alert("Грешка при изпращане на отзива.");
+    return;
   }
 
-  reviews[currentProductId].push({
-    name,
-    rating,
-    text
-  });
-
-  localStorage.setItem(
-    "productReviews",
-    JSON.stringify(reviews)
-  );
-
   event.target.reset();
-  renderReviews();
+
+  await renderReviews();
 
   alert("Отзивът беше добавен!");
 }
-
 
 /* КОРЗИНА */
 
